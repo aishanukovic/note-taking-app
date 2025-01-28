@@ -3,25 +3,3 @@ node_modules/
 
 # Environment variables
 .env
-
-# Logs
-*.log
-logs/
-npm-debug.log*
-
-# System files
-.DS_Store
-Thumbs.db
-
-# IDE settings
-.vscode/
-.idea/
-
-# Temporary files
-*.tmp
-*.swp
-*.bak
-
-# Build files
-dist/
-build/
