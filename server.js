@@ -63,4 +63,15 @@ passport.deserializeUser((id, done) => {
     User.findById(id, (err, user) => done(err, user));
 });
 
+function isAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/login');
+}
+
+app.get('/user/homepage', isAuthenticated, (req, res) => {
+    res.render('user/homepage', { user: req.user });
+});
+
 app.listen(PORT, () => console.log(`Server running on http://${PORT}`));
