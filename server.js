@@ -15,7 +15,8 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 
 app.get('/', (req, res) => {
-    res.render('index');
+    const user = req.session.user || null;
+    res.render('index', { user: user });
 });
 
 mongoose.connect('mongodb://localhost:27017/noteApp', { useNewUrlParser: true, useUnifiedTopology: true })
