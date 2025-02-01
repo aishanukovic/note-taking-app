@@ -7,6 +7,7 @@ const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('./models/user');
+const authRoutes = require('./routes/auth');
 
 dotenv.config();
 const app = express();
@@ -38,6 +39,8 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use('/auth', authRoutes);
 
 passport.use(new LocalStrategy(
     { usernameField: 'email' },
