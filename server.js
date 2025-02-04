@@ -37,31 +37,39 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Passport authentication strategy
-passport.use(new LocalStrategy(
-    { usernameField: 'email' },
-    (email, password, done) => {
-        User.findOne({ email: email }, (err, user) => {
-            if (err) return done(err);
-            if (!user) return done(null, false, { message: 'Incorrect email.' });
+passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
+    try {
+        const user = await User.findOne({ email: email });
 
-            bcrypt.compare(password, user.password, (err, isMatch) => {
-                if (err) return done(err);
-                if (!isMatch) return done(null, false, { message: 'Incorrect password.' });
-                return done(null, user);
-            });
-        });
+        if (!user) {
+            return done(null, false, { message: "Incorrect email" });
+        }
+
+        if (!user.validPassword(password)) {
+            return done(null, false, { message: "Incorrect password" });
+        }
+
+        return done(null, user);
+    } catch (err) {
+        return done(err);
     }
-));
+}));
 
 passport.serializeUser((user, done) => done(null, user.id));
 
-passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user) => done(err, user));
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await User.findById(id);
+        done(null, user);
+    } catch (err) {
+        done(err);
+    }
 });
 
 //Routes
 app.use('/auth', authRoutes);
 app.use('/notes', noteRoutes);
+app.use('/user', require('./routes/user'));
 
 // Authentication Middleware
 function isAuthenticated(req, res, next) {
@@ -79,9 +87,4 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-// Protected user homepage
-app.get('/user/homepage', isAuthenticated, (req, res) => {
-    res.render('user/homepage', { user: req.user || {} });
-});
-
-app.listen(PORT, () => console.log(`Server running on http://${PORT}`));
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

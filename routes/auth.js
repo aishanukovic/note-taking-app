@@ -19,7 +19,7 @@ router.post('/register', async (req, res) => {
 
         let user = await User.findOne({ email });
         if (user) {
-            return res.status(400).send('User already exists');
+            return res.status(400).render('auth/register', { error: 'User already exists' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -37,15 +37,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/user/homepage',
     failureRedirect: '/login',
-    failureFlash: true
 }));
-
-router.get('/logout', (req, res) => {
-    req.logout(err => {
-        if (err) return next(err);
-        res.redirect('/');
-    });
-});
 
 router.get('/logout', (req, res, next) => {
     req.logout(err => {
