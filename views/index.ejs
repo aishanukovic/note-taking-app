@@ -15,7 +15,7 @@
                 <h1>Welcome to our simple and easy-to-use Note-Taking App!</h1>
                 <p>Keep your thoughts organized with our app. Sign in or register to get started.</p>
 
-                <% if (!user) { %>
+                <% if (typeof user === 'undefined' || !user) { %>
                     <a href="/auth/login" class="btn btn-primary">Login</a>
                     <a href="/auth/register" class="btn btn-success">Register</a>
                 <% } else { %>

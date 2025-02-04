@@ -5,6 +5,14 @@ const User = require('../models/user');
 
 const router = express.Router();
 
+router.get('/login', (req, res) => {
+    res.render('auth/login');
+});
+
+router.get('/register', (req, res) => {
+    res.render('auth/register');
+});
+
 router.post('/register', async (req, res) => {
     try {
         const { email, password } = req.body;
