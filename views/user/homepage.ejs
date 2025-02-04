@@ -14,9 +14,21 @@
             <h1>Welcome, <%= user.email %>!</h1>
             <p>Here is where you can access, modify, and create new notes.</p>
             <a href="/notes" class="btn btn-primary">View Notes</a>
-            <a href="/auth/logout" class="btn btn-danger">Logout</a>
+            <button id="logoutButton" class="btn btn-danger">Logout</button>
         </div>
 
         <%- include('../partials/footer.ejs') %>
+
+        <script>
+            document.getElementById('logoutButton').addEventListener('click', function(event) {
+                event.preventDefault();
+
+                const userConfirmed = confirm('Are you sure you want to logout?');
+
+                if (userConfirmed) {
+                    window.location.href = '/auth/logout';
+                }
+            });
+        </script>
     </body>
 </html>
