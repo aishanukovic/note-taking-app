@@ -10,10 +10,20 @@ const noteSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    collection: {
+        type: String,
+        default: 'Uncategorized'
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', 
+        required: true
+    },
     createdAt: {
         type: Date,
         default: Date.now
     }
 });
 
-module.exports = mongoose.model('Note', noteSchema);
+const Note = mongoose.model('Note', noteSchema);
+module.exports = Note;

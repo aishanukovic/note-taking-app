@@ -5,7 +5,7 @@ const session = require('express-session');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const LocalStrategy = require('passport-local').Strategy;
-const User = require('./models/user');
+const User = require('./models/UserModel');
 const authRoutes = require('./routes/auth');
 const noteRoutes = require('./routes/notes');
 
@@ -42,11 +42,12 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, passwor
         const user = await User.findOne({ email: email });
 
         if (!user) {
-            return done(null, false, { message: "Incorrect email" });
+            return done(null, false, { message: "Incorrect email or password" });
         }
 
-        if (!user.validPassword(password)) {
-            return done(null, false, { message: "Incorrect password" });
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return done(null, false, { message: 'Incorrect email or password' });
         }
 
         return done(null, user);

@@ -6,6 +6,12 @@
         <title>User Homepage</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="/css/style.css" rel="stylesheet">
+        <style>
+            body {
+                background-color: #f8f9fa;
+                color: #212529;
+            }
+        </style>
     </head>
     <body>
         <%- include('../partials/header.ejs') %>
@@ -13,20 +19,76 @@
         <div class="container mt-5">
             <h1>Welcome, <%= user.email %>!</h1>
             <p>Here is where you can access, modify, and create new notes.</p>
-            <a href="/notes" class="btn btn-primary">View Notes</a>
-            <button id="logoutButton" class="btn btn-danger">Logout</button>
+            <button id="createNoteButton" class="btn btn-primary mb-3">Create New Note</button>
+            <button id="toggleView" class="btn btn-secondary mb-3">Change View</button>
+            <button id="toggleTheme" class="btn btn-info mb-3">Change Theme</button>
+            <button id="logoutButton" class="btn btn-danger mb-3">Logout</button>
+
+            <div id="notesList" class="list-view">
+                <% notes.forEach(note => { %>
+                    <div class="note-card">
+                        <h5><%= note.title %></h5>
+                        <p><%= note.content %></p>
+                        <p><small>Created on: <%= note.createdAt ? new Date(note.createdAt).toLocaleString() : 'N/A' %></small></p>
+                    </div>
+                <% }) %>
+            </div>
+
+            <div id="collectionsView" class="collections-view" style="display:none;">
+                <% let currentCollection = ''; %>
+                <% notes.forEach(note => { %>
+                    <% if (note.collection !== currentCollection) { %>
+                        <div class="collection-header">
+                            <h3><%= note.collection ? note.collection : 'Uncategorized' %></h3>
+                        </div>
+                        <% currentCollection = note.collection; %>
+                    <% } %>
+                    <div class="collection-card">
+                        <p><%= note.title %></p>
+                        <p><small>Created on: <%= note.createdAt.toLocaleString() %></small></p>
+                    </div>
+                <% }) %>
+            </div>
         </div>
 
         <%- include('../partials/footer.ejs') %>
 
         <script>
+            document.getElementById('createNoteButton').addEventListener('click', function() {
+                window.location.href = '/notes/create';
+            });
+            
             document.getElementById('logoutButton').addEventListener('click', function(event) {
                 event.preventDefault();
-
+                
                 const userConfirmed = confirm('Are you sure you want to logout?');
 
                 if (userConfirmed) {
                     window.location.href = '/auth/logout';
+                }
+            });
+
+            document.getElementById('toggleView').addEventListener('click', function() {
+                const listView = document.getElementById('notesList');
+                const collectionsView = document.getElementById('collectionsView');
+
+                if (listView.style.display === 'none') {
+                    listView.style.display = 'block';
+                    collectionsView.style.display = 'none';
+                } else {
+                    listView.style.display = 'none';
+                    collectionsView.style.display = 'block';
+                }
+            });
+
+            document.getElementById('toggleTheme').addEventListener('click', function() {
+                const body = document.body;
+                if (body.style.backgroundColor === 'rgb(248, 249, 250)') {
+                    body.style.backgroundColor = '#343a40';
+                    body.style.color = '#f8f9fa';
+                } else {
+                    body.style.backgroundColor = '#f8f9fa';
+                    body.style.color = '#212529';
                 }
             });
         </script>

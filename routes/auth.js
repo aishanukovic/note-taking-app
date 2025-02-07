@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
-const User = require('../models/user');
+const User = require('../models/UserModel');
 
 const router = express.Router();
 
@@ -34,16 +34,31 @@ router.post('/register', async (req, res) => {
     }
 });
 
-router.post('/login', passport.authenticate('local', {
-    successRedirect: '/user/homepage',
-    failureRedirect: '/login',
-}));
+router.post('/login', (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            return res.status(401).render('auth/login', { error: 'Incorrect email or password' });
+        }
+
+        req.logIn(user, (err) => {
+            if (err) {
+                return next(err);
+            }
+            return res.redirect('/user/homepage');
+        });
+    }) (req, res, next);
+});
 
 router.get('/logout', (req, res, next) => {
     req.logout(err => {
         if (err) return next(err);
-        req.session.destroy();
-        res.redirect('/');
+        req.session.destroy(err => {
+            if (err) return next(err);
+            res.redirect('/');
+        });
     });
 });
 
