@@ -16,7 +16,7 @@
     <body>
         <%- include('../partials/header.ejs') %>
 
-        <div class="container mt-5">
+        <div class="container mt-5">        
             <h1>Welcome, <%= user.email %>!</h1>
             <p>Here is where you can access, modify, and create new notes.</p>
             <button id="createNoteButton" class="btn btn-primary mb-3">Create New Note</button>
@@ -27,7 +27,7 @@
             <div id="notesList" class="list-view">
                 <% notes.forEach(note => { %>
                     <div class="note-card">
-                        <h5><%= note.title %></h5>
+                        <h5><a href="/notes/<%= note.id %>"<%= note.title %></a></h5>
                         <p><%= note.content %></p>
                         <p><small>Created on: <%= note.createdAt ? new Date(note.createdAt).toLocaleString() : 'N/A' %></small></p>
                     </div>
@@ -44,7 +44,7 @@
                         <% currentCollection = note.collection; %>
                     <% } %>
                     <div class="collection-card">
-                        <p><%= note.title %></p>
+                        <p><a href="/notes/<%= note.id %>"<%= note.title %></a></p>
                         <p><small>Created on: <%= note.createdAt.toLocaleString() %></small></p>
                     </div>
                 <% }) %>
@@ -54,6 +54,7 @@
         <%- include('../partials/footer.ejs') %>
 
         <script>
+            console.log("JavaScript is loading properly!");
             document.getElementById('createNoteButton').addEventListener('click', function() {
                 window.location.href = '/notes/create';
             });

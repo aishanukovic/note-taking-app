@@ -5,6 +5,7 @@ const session = require('express-session');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const LocalStrategy = require('passport-local').Strategy;
+const methodOverride = require('method-override');
 const User = require('./models/UserModel');
 const authRoutes = require('./routes/auth');
 const noteRoutes = require('./routes/notes');
@@ -17,6 +18,7 @@ const PORT = process.env.PORT || 5050;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(methodOverride('_method'));
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
