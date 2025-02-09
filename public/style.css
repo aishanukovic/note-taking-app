@@ -6,7 +6,7 @@ body {
 }
 
 header {
-    position: fixed;
+    position: sticky;
     z-index: 1050;
     width: 100%;
     top: 0;
@@ -23,7 +23,6 @@ header {
 
 .container {
     flex-grow: 1;
-    padding-top: 20px;
 }
 
 .navbar .header {
@@ -44,6 +43,11 @@ header {
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 5px;
 }
+
+.navbar-brand small {
+    position: relative;
+    top: 8px;
+}
   
 footer {
     background-color: #343a40;
@@ -54,13 +58,21 @@ footer {
 }
   
 @media (max-width: 768px) {
-    body {
-      padding-top: 70px;
+    .navbar-page {
+        padding-top: 150px;
+    }
+
+    .container {
+        padding-top: 10px;
     }
 }
   
 @media (max-width: 576px) {
-    body {
-      padding-top: 55px;
+    .navbar-page {
+        padding-top: 150px;
+    }
+
+    .container {
+        padding-top: 5px;
     }
 }
