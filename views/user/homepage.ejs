@@ -24,31 +24,54 @@
             <button id="toggleTheme" class="btn btn-info mb-3">Change Theme</button>
             <button id="logoutButton" class="btn btn-danger mb-3">Logout</button>
 
-            <div id="notesList" class="list-view">
+            <div id="notesList" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                 <% notes.forEach(note => { %>
-                    <div class="note-card">
-                        <h5><a href="/notes/<%= note.id %>"<%= note.title %></a></h5>
-                        <p><%= note.content %></p>
-                        <p><small>Created on: <%= note.createdAt ? new Date(note.createdAt).toLocaleString() : 'N/A' %></small></p>
+                    <div class="col">
+                        <a href="/notes/<%= note.id %>" class="text-decoration-none">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title"><%= note.title %></h5>
+                                    <p class="card-text">
+                                        <%= note.content.length > 100 ? note.content.substring(0, 100) + '...' : note.content %>
+                                    </p>
+                                </div>
+                                <div class="card-footer bg-light text-muted">
+                                    <small>Created on: <%= note.createdAt ? new Date(note.createdAt).toLocaleString() : 'N/A' %></small>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 <% }) %>
-            </div>
+            </div>                        
 
             <div id="collectionsView" class="collections-view" style="display:none;">
                 <% let currentCollection = ''; %>
                 <% notes.forEach(note => { %>
                     <% if (note.collection !== currentCollection) { %>
-                        <div class="collection-header">
-                            <h3><%= note.collection ? note.collection : 'Uncategorized' %></h3>
+                        <div class="collection-header mt-4">
+                            <h3 class="text-primary"><%= note.collection ? note.collection : 'Uncategorized' %></h3>
                         </div>
                         <% currentCollection = note.collection; %>
                     <% } %>
-                    <div class="collection-card">
-                        <p><a href="/notes/<%= note.id %>"<%= note.title %></a></p>
-                        <p><small>Created on: <%= note.createdAt.toLocaleString() %></small></p>
+                    
+                    <div class="col mb-4">
+                        <a href="/notes/<%= note.id %>" class="text-decoration-none">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title"><%= note.title %></h5>
+                                    <p class="card-text">
+                                        <%= note.content.length > 100 ? note.content.substring(0, 100) + '...' : note.content %>
+                                    </p>
+                                </div>
+                                <div class="card-footer bg-light text-muted">
+                                    <small>Created on: <%= note.createdAt ? new Date(note.createdAt).toLocaleString() : 'N/A' %></small>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 <% }) %>
             </div>
+                       
         </div>
 
         <%- include('../partials/footer.ejs') %>
