@@ -14,7 +14,6 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5050;
 
-// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -23,12 +22,11 @@ app.use(methodOverride('_method'));
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-// Database connection
 mongoose.connect('mongodb://localhost:27017/noteApp', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB'))
     .catch((err) => console.error('MongoDB connection error: ', err));
 
-// Session and Passport setup
+
 app.use(session({
     secret: 'your-secret-key',
     resave: false,
@@ -38,7 +36,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Passport authentication strategy
 passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
     try {
         const user = await User.findOne({ email: email });
@@ -69,12 +66,10 @@ passport.deserializeUser(async (id, done) => {
     }
 });
 
-//Routes
 app.use('/auth', authRoutes);
 app.use('/notes', noteRoutes);
 app.use('/user', require('./routes/user'));
 
-// Authentication Middleware
 function isAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
@@ -82,7 +77,6 @@ function isAuthenticated(req, res, next) {
     res.redirect('/login');
 };
 
-// Home route
 app.get('/', (req, res) => {
     if (req.isAuthenticated()) {
         return res.redirect('/user/homepage');

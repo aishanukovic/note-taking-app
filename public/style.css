@@ -48,6 +48,49 @@ header {
     position: relative;
     top: 8px;
 }
+
+.search-container {
+    position: relative;
+}
+
+.search-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    padding: 8px 12px;
+    transition: all 0.3s ease-in-out;
+}
+
+.search-link i {
+    margin-right: 5px;
+}
+
+.search-link.hidden {
+    display: none;
+}
+
+.search-form {
+    position: absolute;
+    right: 0;
+    width: 220px;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+.search-form.expanded {
+    transform: scaleX(1);
+}
+
+.search-form input {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
   
 footer {
     background-color: #343a40;
@@ -55,6 +98,99 @@ footer {
     text-align: center;
     padding: 20px 0;
     margin-top: auto;
+}
+
+.ql-content ul {
+    list-style-type: disc;
+    margin-left: 1.5em;
+    padding-left: 0;
+}
+
+.ql-content ol {
+    list-style-type: decimal;
+    margin-left: 1.5em;
+    padding-left: 0;
+}
+
+.ql-content li {
+    padding-left: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.ql-content p {
+    margin-bottom: 1em;
+}
+
+.ql-content strong {
+    font-weight: bold;
+}
+
+.ql-content em {
+    font-style: italic;
+}
+
+.ql-content u {
+    text-decoration: underline;
+}
+
+.ql-content p[class*="ql-align-"] {
+    margin-bottom: 1em;
+}
+
+.ql-content .ql-align-center,
+.ql-content p.ql-align-center {
+    text-align: center !important;
+}
+
+.ql-content .ql-align-right,
+.ql-content p.ql-align-right {
+    text-align: right !important;
+}
+
+.ql-content .ql-align-justify,
+.ql-content p.ql-align-justify {
+    text-align: justify !important;
+}
+
+.ql-content .ql-align-left,
+.ql-content p.ql-align-left {
+    text-align: left !important;
+}
+
+.ql-content li[class*="ql-align-"] {
+    padding-left: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.ql-content li.ql-align-center {
+    text-align: center !important;
+    list-style-position: inside;
+}
+
+.ql-content li.ql-align-right {
+    text-align: right !important;
+    list-style-position: inside;
+}
+
+.ql-content li.ql-align-justify {
+    text-align: justify !important;
+}
+
+.ql-content li.ql-align-left {
+    text-align: left !important;
+}
+
+.ql-content blockquote {
+    border-left: 4px solid #ccc;
+    margin-bottom: 1em;
+    margin-top: 1em;
+    padding-left: 16px;
+}
+
+.ql-content code {
+    background-color: #f0f0f0;
+    border-radius: 3px;
+    padding: 2px 4px;
 }
   
 @media (max-width: 768px) {

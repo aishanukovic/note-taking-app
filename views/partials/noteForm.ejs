@@ -1,0 +1,77 @@
+<form action="<%= action %>" method="<%= method %>" class="needs-validation" novalidate>
+    <div class="mb-3">
+        <label for="title" class="form-label fw-bold">Note Title</label>
+        <input type="text" name="title" id="title" class="form-control" placeholder="Enter note title" required value="<%= note.title || '' %>">
+        <div class="invalid-feedback">Title is required.</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="collection" class="form-label fw-bold">Collection (Optional)</label>
+        <input type="text" name="collection" id="collection" class="form-control" placeholder="Enter collection name (e.g., Work, Personal, Ideas)" value="<%= note.collection || '' %>">
+    </div>
+
+    <div class="mb-3">
+        <label for="content" class="form-label fw-bold">Content</label>
+        <div id="editor" style="height: 200px; border: 1px solid #ccc;"></div>
+        <input type="hidden" name="content" id="content" value="<%= note.content || '' %>">
+        <div class="invalid-feedback">Content is required.</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Note</button>
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        const contentField = document.querySelector('#content');
+        
+        if (!form || !contentField) {
+            console.error('Required elements not found');
+            return;
+        }
+
+        const quill = new Quill('#editor', {
+            theme: 'snow',
+            placeholder: 'Write your note here...',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'align': [] }],
+                    ['clean']
+                ]
+            }
+        });
+
+        const initialContent = contentField.value;
+        if (initialContent) {
+            console.log('Loading initial content:', initialContent);
+            quill.root.innerHTML = initialContent;
+        }
+
+        quill.on('text-change', function() {
+            const content = quill.root.innerHTML;
+            contentField.value = content;
+            console.log('Editor content updated:', content);
+        });
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const content = quill.root.innerHTML;
+            console.log('Raw editor content:', content);
+            
+            const isEmpty = !content || content.replace(/<[^>]*>/g, '').trim() === '';
+            
+            if (isEmpty) {
+                alert('Content cannot be empty!');
+                return;
+            }
+
+            contentField.value = content;
+            console.log('Final content being submitted:', contentField.value);
+            
+            form.submit();
+        });
+    });
+</script>

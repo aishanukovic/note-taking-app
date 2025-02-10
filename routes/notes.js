@@ -9,6 +9,39 @@ function ensureAuthenticated(req, res, next) {
     res.redirect('/auth/login');
 }
 
+router.get("/search", ensureAuthenticated, async (req, res) => {
+    try {
+        const searchQuery = req.query.q;
+        
+        if (!searchQuery) {
+            return res.render("user/searchNote", { 
+                notes: [],
+                searchQuery: ''
+            });
+        }
+
+        const notes = await Note.find({
+            user: req.user._id,
+            $or: [
+                { title: { $regex: searchQuery, $options: "i" } },
+                { content: { $regex: searchQuery, $options: "i" } }
+            ]
+        }).sort({ createdAt: -1 });
+
+        res.render("user/searchNote", { 
+            notes,
+            searchQuery 
+        });
+    } catch (error) {
+        console.error("Error searching notes:", error);
+        res.status(500).render("user/searchNote", { 
+            notes: [],
+            searchQuery: req.query.q,
+            error: "An error occurred while searching notes"
+        });
+    }
+});
+
 router.get('/', ensureAuthenticated, async (req, res) => {
     try {
         const notes = await Note.find({ user: req.user._id }).sort({ collection: 1, createdAt: -1 });
@@ -41,8 +74,12 @@ router.get('/:id', ensureAuthenticated, async (req, res) => {
     }
 });
 
-router.post('/', ensureAuthenticated, async (req, res) => {
+router.post('/create', ensureAuthenticated, async (req, res) => {
     const { title, content, collection } = req.body;
+
+    console.log('Title:', title);
+    console.log('Content:', content);
+
     try {
         const newNote = new Note({ 
             title,

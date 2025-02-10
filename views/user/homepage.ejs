@@ -23,9 +23,8 @@
             
             <div class="d-flex flex-wrap justify-content-center gap-3">
                 <button id="createNoteButton" class="btn btn-primary">Create New Note</button>
-                <button id="toggleView" class="btn btn-secondary">Change View</button>
-                <button id="toggleTheme" class="btn btn-info">Change Theme</button>
-                <button id="logoutButton" class="btn btn-danger">Logout</button>
+                <button id="toggleView" class="btn btn-secondary">Collections View</button>
+                <button id="toggleTheme" class="btn btn-info">Light/Dark Mode</button>
             </div>
         
             <div id="notesList" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-4">
@@ -33,11 +32,9 @@
                     <div class="col">
                         <a href="/notes/<%= note.id %>" class="text-decoration-none">
                             <div class="card h-100 shadow-sm">
-                                <div class="card-body">
+                                <div class="card-body ql-content">
                                     <h5 class="card-title"><%= note.title %></h5>
-                                    <p class="card-text">
-                                        <%= note.content.length > 100 ? note.content.substring(0, 100) + '...' : note.content %>
-                                    </p>
+                                    <p class="card-text"><%- note.content %></p>
                                 </div>
                                 <div class="card-footer bg-light text-muted">
                                     <small>Created on: <%= note.createdAt ? new Date(note.createdAt).toLocaleString() : 'N/A' %></small>
@@ -61,11 +58,9 @@
                 <div class="col mb-4">
                     <a href="/notes/<%= note.id %>" class="text-decoration-none">
                         <div class="card h-100 shadow-sm">
-                            <div class="card-body">
+                            <div class="card-body ql-content">
                                 <h5 class="card-title"><%= note.title %></h5>
-                                <p class="card-text">
-                                    <%= note.content.length > 100 ? note.content.substring(0, 100) + '...' : note.content %>
-                                </p>
+                                <p class="card-text"><%- note.content %></p>
                             </div>
                             <div class="card-footer bg-light text-muted">
                                 <small>Created on: <%= note.createdAt ? new Date(note.createdAt).toLocaleString() : 'N/A' %></small>
@@ -84,39 +79,35 @@
             document.getElementById('createNoteButton').addEventListener('click', function() {
                 window.location.href = '/notes/create';
             });
-            
-            document.getElementById('logoutButton').addEventListener('click', function(event) {
-                event.preventDefault();
-                
-                const userConfirmed = confirm('Are you sure you want to logout?');
 
-                if (userConfirmed) {
-                    window.location.href = '/auth/logout';
-                }
-            });
+            let clickCount = 0;
 
             document.getElementById('toggleView').addEventListener('click', function() {
+                clickCount++;
+
                 const listView = document.getElementById('notesList');
                 const collectionsView = document.getElementById('collectionsView');
 
-                if (listView.style.display === 'none') {
-                    listView.style.display = 'block';
-                    collectionsView.style.display = 'none';
-
-                } else {
+                if (clickCount === 1) {
                     listView.style.display = 'none';
                     collectionsView.style.display = 'block';
+                } else if (clickCount === 2) {
+                    window.location.href = '/user/homepage';
                 }
             });
 
             document.getElementById('toggleTheme').addEventListener('click', function() {
                 const body = document.body;
-                if (body.style.backgroundColor === 'rgb(248, 249, 250)') {
+                const isDark = body.classList.contains('dark-mode');
+
+                if (isDark) {
+                    body.classList.remove('dark-mode');
+                    body.style.backgroundColor = '#ffffff';
+                    body.style.color = '#212529';
+                } else {
+                    body.classList.add('dark-mode');
                     body.style.backgroundColor = '#343a40';
                     body.style.color = '#f8f9fa';
-                } else {
-                    body.style.backgroundColor = '#f8f9fa';
-                    body.style.color = '#212529';
                 }
             });
         </script>

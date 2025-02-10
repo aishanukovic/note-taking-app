@@ -11,14 +11,17 @@
 <body class="navbar-page">
     <%- include('../partials/navbar.ejs') %>
 
-    <div class="container mt-5">
-        <h1><%= note.title %></h1>
-        <p><%= note.content %></p>
-        <p><small>Created on: <%= note.createdAt ? new Date(note.createdAt).toLocaleString() : 'N/A' %></small></p>
+    <div class="container d-flex justify-content-center align-items-center vh-50">
+        <div class="card shadow-lg p-4 text-center ql-content" style="max-width: 600px; width: 100%;">
+            <h1 class="mb-3"><%= note.title %></h1>
+            <p class="card-text"><%- note.content %></p>
+            <p class="text-secondary"><small>Created on: <%= note.createdAt ? new Date(note.createdAt).toLocaleString() : 'N/A' %></small></p>
 
-        <a href="/notes/<%= note.id %>/edit" class="btn btn-warning">Edit Note</a>
-
-        <button id="delete-note-btn" class="btn btn-danger" data-note-id="<%= note.id %>">Delete Note</button>
+            <div class="d-flex justify-content-between">
+                <a href="/notes/<%= note.id %>/edit" class="btn btn-warning px-4">Edit Note</a>
+                <button id="delete-note-btn" class="btn btn-danger px-4" data-note-id="<%= note.id %>">Delete</button>
+            </div>
+        </div>
     </div>
 
     <%- include('../partials/footer.ejs') %>
